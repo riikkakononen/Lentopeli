@@ -2,8 +2,6 @@ import mysql.connector
 import time
 import json
 import random
-import math
-from weather_service import get_weather_for_country
 
 
 class Pelaaja:
@@ -266,8 +264,8 @@ try:
     yhteys = mysql.connector.connect(
         host='localhost',
         database='lentopeli',
-        user='riikka',
-        password='koodar1',
+        user='username',
+        password='password',
         autocommit=True,
         collation='utf8mb4_unicode_ci'
     )
