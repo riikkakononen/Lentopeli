@@ -157,8 +157,8 @@ class Peli:
                 self.pelaaja.lisää_tähdet(oikeat_vastaukset)
                 self.pelaaja.lisää_vieraillut_maa(kohdemaa)
                 self.tallenna_tilanne(oikeat_vastaukset, kohdemaa)
-
                 self.co2_manager.update_emissions(300)
+                self.paivita_paastot_tietokantaan()
 
                 if self.co2_manager.is_over_limit():
                     self.kasittele_paastorajan_ylitys()
@@ -171,11 +171,15 @@ class Peli:
                 if saa == "hyvä":
                     print("Sää on hyvä – palaat edelliseen maahan ja voit valita uuden kohteen.")
                     self.co2_manager.update_emissions(300)
+                    self.paivita_paastot_tietokantaan()
+
                     if self.co2_manager.is_over_limit():
                         self.kasittele_paastorajan_ylitys()
                 else:
                     print("Sää on huono – paluu ei onnistu. Yrität uudelleen samaan maahan.")
                     self.co2_manager.update_emissions(300)
+                    self.paivita_paastot_tietokantaan()
+
                     if self.co2_manager.is_over_limit():
                         self.kasittele_paastorajan_ylitys()
 
@@ -201,6 +205,11 @@ class Peli:
             update_query = "UPDATE player_state SET vieraillut_maat = %s"
             self.cursor.execute(update_query, (json.dumps(vieraillut_maat),))
             self.yhteys.commit()
+
+    def paivita_paastot_tietokantaan(self):
+        update_query = "UPDATE player_state SET co2_paastot = %s"
+        self.cursor.execute(update_query, (self.co2_manager.get_total_emissions(),))
+        self.yhteys.commit()
 
     def pelaaja_loppu(self):
         print("\nOnneksi olkoon! Olet vieraillut kaikissa maissa ja suorittanut pelin loppuun!")
@@ -257,8 +266,8 @@ try:
     yhteys = mysql.connector.connect(
         host='localhost',
         database='lentopeli',
-        user='user',
-        password='password',
+        user='riikka',
+        password='koodar1',
         autocommit=True,
         collation='utf8mb4_unicode_ci'
     )

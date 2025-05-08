@@ -1,8 +1,8 @@
 from city_mapping import country_city_map
 import requests
 
-API_KEY = "avain tähän"
-BASE_URL = "URL tähän"
+API_KEY = "960269c95f971eba44c56ab395ed75d4"
+BASE_URL = "https://api.openweathermap.org/data/2.5/weather"
 
 def get_weather_for_country(country):
     city = country_city_map.get(country, country)
